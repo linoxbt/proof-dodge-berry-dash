@@ -79,16 +79,16 @@ const ProofDodgeGame = () => {
         random -= weights[j];
       }
       
-      // Progressive speed increase: start at 1.5, increase by 0.5 every 2 minutes
-      const baseSpeed = 1.5 + Math.floor(uptime / 120) * 0.5;
-      const finalSpeed = boostActive ? baseSpeed * 1.5 : baseSpeed;
+      // Progressive speed increase: start slow at 0.8, increase by 0.3 every 3 minutes
+      const baseSpeed = 0.8 + Math.floor(uptime / 180) * 0.3;
+      const finalSpeed = boostActive ? baseSpeed * 1.3 : baseSpeed;
       
       const newObject: GameObject = {
         id: `${selectedType}-${now}-${Math.random()}-${i}`,
         x: Math.random() * 80 + 10, // 10% to 90% across screen
         y: -50,
         type: selectedType,
-        speed: Math.min(finalSpeed, 6), // Cap at reasonable speed
+        speed: Math.min(finalSpeed, 3.5), // Cap at reasonable speed
       };
       
       setGameObjects(prev => [...prev, newObject]);
@@ -375,17 +375,17 @@ const ProofDodgeGame = () => {
       </div>
 
       {/* Instructions and Footer */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center space-y-2">
-        <p className="text-sm text-muted-foreground">
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-center space-y-3 z-50">
+        <p className="text-sm text-primary/80 font-medium">
           Use ← → or A/D to move • Touch to move on mobile
         </p>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-sm text-primary/90 font-medium bg-background/20 backdrop-blur-sm px-4 py-2 rounded-lg border border-primary/20">
           Made with ❤️ by{' '}
           <a 
             href="https://x.com/linoxbt" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="text-primary hover:text-primary/80 underline"
+            className="text-primary hover:text-primary/80 underline decoration-2 underline-offset-2 font-semibold"
           >
             Linoxbt
           </a>
