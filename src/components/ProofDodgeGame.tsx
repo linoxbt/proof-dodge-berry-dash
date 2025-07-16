@@ -97,21 +97,23 @@ const ProofDodgeGame = () => {
 
   const checkCollisions = useCallback((objects: GameObject[], berryX: number) => {
     const berryRect = {
-      left: berryX - 3,
-      right: berryX + 3,
-      top: 70,
-      bottom: 80,
+      left: berryX - 2.5,
+      right: berryX + 2.5,
+      top: 72,
+      bottom: 78,
     };
 
     return objects.filter(obj => {
       const objRect = {
-        left: obj.x - 2,
-        right: obj.x + 2,
+        left: obj.x - 2.5,
+        right: obj.x + 2.5,
         top: obj.y,
-        bottom: obj.y + 5,
+        bottom: obj.y + 4,
       };
 
-      const collision = berryRect.left < objRect.right &&
+      // Only check collision if object is in the berry's vertical range
+      const collision = obj.y >= 65 && obj.y <= 85 &&
+                       berryRect.left < objRect.right &&
                        berryRect.right > objRect.left &&
                        berryRect.top < objRect.bottom &&
                        berryRect.bottom > objRect.top;
