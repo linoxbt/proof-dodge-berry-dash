@@ -56,33 +56,44 @@ const ProofDodgeGame = () => {
 
   const spawnObject = useCallback(() => {
     const now = Date.now();
-    if (now - lastSpawnRef.current < (boostActive ? 800 : 1200)) return;
+    const baseDelay = boostActive ? 600 : 900;
+    if (now - lastSpawnRef.current < baseDelay) return;
     
     lastSpawnRef.current = now;
-    const objectTypes = ['error', 'zkc-token', 'boost-orb'] as const;
-    const weights = [0.6, 0.3, 0.1]; // Higher chance for errors
     
-    let random = Math.random();
-    let selectedType: typeof objectTypes[number] = 'error';
+    // Spawn 1-3 objects at once, increasing over time
+    const numObjects = Math.min(3, Math.floor(uptime / 120) + 1);
     
-    for (let i = 0; i < weights.length; i++) {
-      if (random < weights[i]) {
-        selectedType = objectTypes[i];
-        break;
+    for (let i = 0; i < numObjects; i++) {
+      const objectTypes = ['error', 'zkc-token', 'boost-orb'] as const;
+      const weights = [0.6, 0.3, 0.1]; // Higher chance for errors
+      
+      let random = Math.random();
+      let selectedType: typeof objectTypes[number] = 'error';
+      
+      for (let j = 0; j < weights.length; j++) {
+        if (random < weights[j]) {
+          selectedType = objectTypes[j];
+          break;
+        }
+        random -= weights[j];
       }
-      random -= weights[i];
+      
+      // Progressive speed increase: start at 1.5, increase by 0.5 every 2 minutes
+      const baseSpeed = 1.5 + Math.floor(uptime / 120) * 0.5;
+      const finalSpeed = boostActive ? baseSpeed * 1.5 : baseSpeed;
+      
+      const newObject: GameObject = {
+        id: `${selectedType}-${now}-${Math.random()}-${i}`,
+        x: Math.random() * 80 + 10, // 10% to 90% across screen
+        y: -50,
+        type: selectedType,
+        speed: Math.min(finalSpeed, 6), // Cap at reasonable speed
+      };
+      
+      setGameObjects(prev => [...prev, newObject]);
     }
-    
-    const newObject: GameObject = {
-      id: `${selectedType}-${now}-${Math.random()}`,
-      x: Math.random() * 80 + 10, // 10% to 90% across screen
-      y: -50,
-      type: selectedType,
-      speed: boostActive ? 4 : 2.5,
-    };
-    
-    setGameObjects(prev => [...prev, newObject]);
-  }, [boostActive]);
+  }, [boostActive, uptime]);
 
   const checkCollisions = useCallback((objects: GameObject[], berryX: number) => {
     const berryRect = {
@@ -143,7 +154,7 @@ const ProofDodgeGame = () => {
     setGameObjects(prev => {
       const updated = prev
         .map(obj => ({ ...obj, y: obj.y + obj.speed }))
-        .filter(obj => obj.y < 100); // Remove objects that fall off screen
+        .filter(obj => obj.y < 110); // Remove objects that fall past the bottom
       
       return checkCollisions(updated, berryPosition);
     });
@@ -363,10 +374,21 @@ const ProofDodgeGame = () => {
         </div>
       </div>
 
-      {/* Instructions */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center">
+      {/* Instructions and Footer */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center space-y-2">
         <p className="text-sm text-muted-foreground">
           Use ← → or A/D to move • Touch to move on mobile
+        </p>
+        <p className="text-xs text-muted-foreground">
+          Made with ❤️ by{' '}
+          <a 
+            href="https://x.com/linoxbt" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-primary hover:text-primary/80 underline"
+          >
+            Linoxbt
+          </a>
         </p>
       </div>
     </div>
