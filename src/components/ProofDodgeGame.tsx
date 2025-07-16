@@ -250,6 +250,21 @@ const ProofDodgeGame = () => {
             </p>
           </div>
         </Card>
+        
+        {/* Footer */}
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-center">
+          <p className="text-sm text-primary/90 font-medium bg-background/20 backdrop-blur-sm px-4 py-2 rounded-lg border border-primary/20">
+            Made with ❤️ by{' '}
+            <a 
+              href="https://x.com/linoxbt" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary hover:text-primary/80 underline decoration-2 underline-offset-2 font-semibold"
+            >
+              Linoxbt
+            </a>
+          </p>
+        </div>
       </div>
     );
   }
@@ -289,6 +304,21 @@ const ProofDodgeGame = () => {
             </Button>
           </div>
         </Card>
+        
+        {/* Footer */}
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-center">
+          <p className="text-sm text-primary/90 font-medium bg-background/20 backdrop-blur-sm px-4 py-2 rounded-lg border border-primary/20">
+            Made with ❤️ by{' '}
+            <a 
+              href="https://x.com/linoxbt" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary hover:text-primary/80 underline decoration-2 underline-offset-2 font-semibold"
+            >
+              Linoxbt
+            </a>
+          </p>
+        </div>
       </div>
     );
   }
